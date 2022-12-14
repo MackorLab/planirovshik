@@ -1,33 +1,36 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import bridge from "@vkontakte/vk-bridge";
+let sid_user;
 
-import "./index.scss";
-
-import App from "./App";
-import store from "./store";
-
-
-import bridge from '@vkontakte/vk-bridge';
-
-bridge.subscribe(e => console.log(e));
+console.log("Test data");
+bridge.send("VKWebAppInit");
 
 
+bridge.send('VKWebAppGetUserInfo')
+.then(data => {
+//console.log(data.id);
+//console.log(data.first_name);
+//console.log(data.last_name);
+//console.log(data);
+
+sid_user  = (data.id);
 
 
-const render = Component =>
-  ReactDOM.render(
-    <Provider store={store}>
-      <Component />
-    </Provider>,
-    document.getElementById("root")
-  );
+       
+})
+.catch(error => {
 
-render(App);
+});
 
-if (module.hot) {
-  module.hot.accept("./App", () => {
-    const NextApp = require("./App").default;
-    render(NextApp);
-  });
-}
+
+
+ReactDOM.render(
+<React.StrictMode>
+  <App />
+</React.StrictMode>,
+  document.getElementById('root')
+);
+
